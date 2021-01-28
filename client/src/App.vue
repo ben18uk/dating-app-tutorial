@@ -1,15 +1,46 @@
 <template>
-  <Playground></Playground>
+  <div>
+    <Navbar></Navbar>
+
+    <Login></Login> 
+    <Home></Home>
+  </div>
 </template>
 
 <script lang="ts">
+
 import { defineComponent } from 'vue'
-import Playground from './components/Playground.vue'
+import Login from './components/Login.vue'
+import Home from './components/Home.vue'
+import Navbar from './components/Navbar.vue'
+import { User } from './models/user-model';
+import { accountService } from './services/account.service';
+
 
 export default defineComponent({
   name: 'App',
   components: {
-    Playground
+    Login,
+    Home,
+    Navbar
+  },
+  data () {
+    return {
+
+    }
+  },
+  mounted () {
+    this.setCurrentUser();
+  },
+  methods: {
+    setCurrentUser() {
+      let userstring = localStorage.getItem('user');
+
+      if (userstring !== null) {
+        let user: User = JSON.parse(userstring);
+        accountService.setCurrentUser(user);
+      }
+    },
   }
 })
 </script>
@@ -20,7 +51,6 @@ export default defineComponent({
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #f0f0f0;
 }
 </style>

@@ -10,5 +10,8 @@ export default defineConfig({
       key: fs.readFileSync("./ssl/server.key"),
       cert: fs.readFileSync("./ssl/server.crt")
     }
+  },
+  optimizeDeps: {
+    exclude: ['rxjs/operators']
   }
 })
