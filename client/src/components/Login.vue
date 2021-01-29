@@ -66,7 +66,7 @@
 
 import { defineComponent } from "vue";
 import { accountService } from '../services/account.service'
-
+import { useToast } from 'vue-toastification'
 
 export default defineComponent({
   name: 'login',
@@ -88,16 +88,21 @@ export default defineComponent({
      * Login function that posts login information to the server
      */
     login() {
+      const toast = useToast();
+
       const form = {
         username: this.email,
         password: this.password
       }
+
       accountService.login(form)
         .subscribe(
-          response => {
+          () => {
               console.log('logged in');
           },
-          error => console.error(error)
+          error => {
+            toast.error(error.message);
+          }
         )
     },
   }

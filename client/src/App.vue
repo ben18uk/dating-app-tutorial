@@ -2,8 +2,7 @@
   <div>
     <Navbar></Navbar>
 
-    <Login></Login> 
-    <Home></Home>
+    <router-view></router-view>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-gray-800">
+  <nav class="fixed w-full bg-gray-800">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-16">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -18,18 +18,19 @@
         </div>
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex-shrink-0 flex items-center">
-            <h1>Dating App</h1>
+            <router-link :to="'/'" ><h1 class="font-sans">Dating App</h1></router-link>
           </div>
           <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
-              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-
+            <div class="flex space-x-4" v-if="user">
+              <router-link :to="'/members'" active-class="bg-gray-900" class="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium">Matches</router-link>
+              <router-link :to="'/lists'" active-class="bg-gray-900" class="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium">Lists</router-link>
+              <router-link :to="'/messages'" active-class="bg-gray-900" class="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium">Messages</router-link>
             </div>
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
-          <span v-if="user">Welcome {{user.username}}</span>
+          <span v-if="user">Welcome {{ $filters.capitalise(user.username) }}</span>
 
           <!-- Profile dropdown -->
           <div class="ml-3 relative">
@@ -52,8 +53,8 @@
             <div v-if="dropdownActive" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
               <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-              <a v-if="!user" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign in</a>
-              <a v-if="user" @click="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+              <a href="#" v-if="!user" @click="goToLogin()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign in</a>
+              <a href="#" v-if="user" @click="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
             </div>
           </div>
         </div>
@@ -81,6 +82,7 @@
 
 import { defineComponent } from "vue";
 import { User } from "../models/user-model";
+import router from "../router/router";
 import { accountService } from "../services/account.service";
 
 export default defineComponent({
@@ -104,8 +106,15 @@ export default defineComponent({
   methods: {
     toggleDropdown() {this.dropdownActive = !this.dropdownActive},
 
+    goToLogin() {
+      this.toggleDropdown();
+      router.push('/login');
+    },
+
     logout() {
       accountService.logout();
+      this.toggleDropdown();
+      router.push('/');
     },
 
     getCurrentUser() {

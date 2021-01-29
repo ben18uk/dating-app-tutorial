@@ -1,11 +1,14 @@
 import { AxiosResponse } from 'axios';
 import axios from 'axios-observable';
 import { Observable, ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user-model';
+import { useToast } from 'vue-toastification'
+
 
 class AccountService {
     baseUrl = 'https://localhost:5001/api/';
+    authenticated = false;
     private currentUserSource = new ReplaySubject<User>(1);
     currentUser$ = this.currentUserSource.asObservable();
 
@@ -13,11 +16,11 @@ class AccountService {
         return axios
             .post(this.baseUrl + 'account/login', form).pipe(
                 map((response: AxiosResponse<User>) => {
-                    const user = response;
-                    if (user) {
-                        localStorage.setItem('user', JSON.stringify(user.data));
-                        this.currentUserSource.next(user.data);
+                    if (response) {
+                        localStorage.setItem('user', JSON.stringify(response.data));
+                        this.currentUserSource.next(response.data);
                     }
+                    return response;
                 })
             )
 
@@ -26,11 +29,11 @@ class AccountService {
     register(form: User): Observable<any> {
         return axios
             .post(this.baseUrl + 'account/register', form).pipe(
-                map((user: AxiosResponse<User>) => {
-                    if (user) {
-                        localStorage.setItem('user', JSON.stringify(user.data));
-                        this.currentUserSource.next(user.data);
-                        return user.data;
+                map((response: AxiosResponse<User>) => {
+                    if (response) {
+                        localStorage.setItem('user', JSON.stringify(response.data));
+                        this.currentUserSource.next(response.data);
+                        return response.data;
                     }
                 })
             )
@@ -38,6 +41,9 @@ class AccountService {
 
     setCurrentUser(user: User) {
         this.currentUserSource.next(user);
+        if (user) {
+            this.authenticated = true;
+        }
     }
 
     logout() {

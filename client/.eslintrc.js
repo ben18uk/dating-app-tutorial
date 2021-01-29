@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
     "env": {
         "browser": true,
@@ -18,6 +19,7 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "vue/require-v-for-key": "off"
+        "vue/require-v-for-key": "off",
+        "no-explicit-any": "off"
     }
 };

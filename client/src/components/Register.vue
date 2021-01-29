@@ -59,7 +59,7 @@
           </div> -->
 
           <div>
-            <label class="block text-sm font-medium text-gray-700">
+            <label class="block text-sm font-medium">
               Cover photo
             </label>
             <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -100,6 +100,7 @@ import { defineComponent } from "vue";
 import { UserIcon } from '@zhuowenli/vue-feather-icons'
 import { LockIcon } from '@zhuowenli/vue-feather-icons'
 import { accountService } from "../services/account.service";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: 'register',
@@ -115,13 +116,15 @@ export default defineComponent({
   },
   methods: {
     register() {
+      const toast = useToast();
+
       accountService.register(this.form).subscribe(
         response => {
           console.log(response);
           this.cancel();
         },
         error => {
-          console.error(error);
+          toast.error(error.message);
         }
       )
     },
