@@ -100,9 +100,6 @@ export default defineComponent({
           () => {
               console.log('logged in');
           },
-          error => {
-            toast.error(error.message);
-          }
         )
     },
   }

@@ -5,32 +5,21 @@ import Lists from "../components/Lists.vue";
 import Messages from "../components/Messages.vue";
 import MemberList from "../components/members/MemberList.vue";
 import MemberDetail from "../components/members/MemberDetail.vue";
+import NotFound from "../components/NotFound.vue";
 import { accountService } from "../services/account.service";
 import { first, map } from "rxjs/operators";
 import { useToast } from "vue-toastification";
 
-const authguard =  (to: any, from: any, next: any) => {
-    accountService.currentUser$.pipe(
-        map(user => {
-            if (user) next();
-            else next('/login')
-        })
-    )
-}
 
 // Routes
 const routes = [
-    { 
-        path: '/',
-        component: Home,
-    },
+    { path: '/', component: Home },
     { path: '/login', component: Login },
     { path: '/members', component: MemberList },
     { path: '/members/:id', component: MemberDetail },
     { path: '/lists', component: Lists },
     { path: '/messages', component: Messages },
-    { path: '/**', component: Home },
-
+    { path: '/**', component: NotFound }
 ]
 
 // History implementation used by the router

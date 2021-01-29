@@ -6,6 +6,10 @@ import Toast, { POSITION } from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
 
+/**
+ * Create app
+ */
+
 const app = createApp(App);
 
 app.config.globalProperties.$filters = {

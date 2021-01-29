@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
-import axios from 'axios-observable';
+// import axios from 'axios-observable';
 import { Observable, ReplaySubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../models/user-model';
-import { useToast } from 'vue-toastification'
+import { useToast } from 'vue-toastification';
+import $axios from '../axios/axios';
 
 
 class AccountService {
@@ -13,7 +14,7 @@ class AccountService {
     currentUser$ = this.currentUserSource.asObservable();
 
     login(form: User): Observable<any> {
-        return axios
+        return $axios
             .post(this.baseUrl + 'account/login', form).pipe(
                 map((response: AxiosResponse<User>) => {
                     if (response) {
@@ -27,7 +28,7 @@ class AccountService {
     }
 
     register(form: User): Observable<any> {
-        return axios
+        return $axios
             .post(this.baseUrl + 'account/register', form).pipe(
                 map((response: AxiosResponse<User>) => {
                     if (response) {
@@ -52,7 +53,7 @@ class AccountService {
     }
 
     getUsers(): Observable<any> {
-        return axios
+        return $axios
           .get('https://localhost:5001/api/users')
       }
       
